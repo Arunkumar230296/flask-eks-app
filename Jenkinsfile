@@ -25,7 +25,7 @@ pipeline {
 
         stage('ECR Login') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'a6734bf8-5850-45a6-b4e6-4c0698f2eaae']]) {
                     sh '''
                     aws ecr get-login-password --region $AWS_REGION | \
                     docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
@@ -42,7 +42,7 @@ pipeline {
 
         stage('Push to ECR') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'a6734bf8-5850-45a6-b4e6-4c0698f2eaae']]) {
                     sh 'docker push $IMAGE_URI'
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
 
         stage('Update Kubeconfig') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'a6734bf8-5850-45a6-b4e6-4c0698f2eaae']]) {
                     sh '''
                     aws eks update-kubeconfig \
                       --region $AWS_REGION \
@@ -62,7 +62,7 @@ pipeline {
 
         stage('Deploy to EKS') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'a6734bf8-5850-45a6-b4e6-4c0698f2eaae']]) {
                     sh '''
                     kubectl apply -f k8s/deployment.yaml
                     kubectl apply -f k8s/service.yaml
